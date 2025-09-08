@@ -1,0 +1,19 @@
+groups:
+- name: nlm-atlas.rules
+  rules:
+  - alert: NLMEndpointDegraded
+    expr: nlm_endpoint_health_score{job="nlm-atlas"} >= 4
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "NLM endpoint {{ $labels.instance }} health >= {{ $value }}"
+      runbook: "https://runbooks.internal/atlas/endpoint-degraded"
+  - alert: NLMEndpointCritical
+    expr: nlm_endpoint_health_score{job="nlm-atlas"} >= 7
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "NLM endpoint {{ $labels.instance }} critical (>=7). HOTL required."
+      pagerduty: "nlm-atlas-critical"

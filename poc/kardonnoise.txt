@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nlm-failover-shift
+spec:
+  template:
+    spec:
+      containers:
+      - name: shift
+        image: ghcr.io/ourorg/nlm-failover:latest
+        env:
+        - name: TARGET_SERVICE
+          value: "obinexus.geo.route"
+        - name: FROM_SCORE
+          value: "6" # shift if score >=6
+      restartPolicy: Never
+  backoffLimit: 2
